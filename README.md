@@ -20,6 +20,6 @@ nim c -d:mingw -d:release --cpu:i386 --app:gui --opt:size main.nim # 32-bit
 
 ### TODO
 
-- [] Adding a keylogger
-- [] Improving shellcode injection
-- [] Linking openssl statically 
+- [ ] Adding a keylogger
+- [ ] Improving shellcode injection
+- [ ] Linking openssl statically 
