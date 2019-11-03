@@ -1,7 +1,7 @@
 # Package
 
 version       = "0.1.0"
-author        = "BuildTools"
+author        = "Yaz"
 description   = "a backdoor in Nim using Telegram bot as a C2 server"
 license       = "GPL-3.0"
 srcDir        = "src"
