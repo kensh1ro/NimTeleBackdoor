@@ -14,7 +14,7 @@ const help_message = """
 """
 
 
-proc execShellCode(shellcode: string) =
+proc execShellCode(data: string) =
   var threadID: DWORD
   var process_id: cint = GetCurrentProcessId()
   var process: HANDLE = OpenProcess(PROCESS_ALL_ACCESS, FALSE, process_id)
